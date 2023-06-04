@@ -1,14 +1,13 @@
-const express = require('express');
+const express, { Request, Response } = require('express');
 const colors = require('colors');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const { config } = require('./config');
 
-//const MONGODB_URI = 'mongodb+srv://aniapw:s35bE6DdEZ34rFck@klaster1.soqpzce.mongodb.net/?retryWrites=true&w=majority';
 const app = express();
 dotenv.config();
 
-app.get('/', (req, res) => {
+app.get('/', (req: Request, res: Response) => {
   res.send('Hello, World!');
 });
 
