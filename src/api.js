@@ -5,7 +5,7 @@ import Joi from "joi";
 
 export const api = Router();
   
-api.get('/fishkapp', async (req, res) => {
+api.get('/cards', async (req, res) => {
     try {
         const fishkas = await Fishka.find();
         res.json({fishkas});
@@ -14,7 +14,7 @@ api.get('/fishkapp', async (req, res) => {
     }
 });
 
-api.get('/fishkapp/:id', async (req, res) => {
+api.get('/cards/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const reqFishkas = await Fishka.findOne({_id: id })
@@ -24,7 +24,7 @@ api.get('/fishkapp/:id', async (req, res) => {
     }
 });
 
-api.post('/fishkapp', async (req, res) => {
+api.post('/cards', async (req, res) => {
     try {
         await fishkaJoiSchema.validateAsync(req.body);
         const { front, back, tags, author } = req.body;
