@@ -6,12 +6,15 @@
   "repository": "https://github.com/nerdbord/fischkapp-api.git",
   "author": "Nerdbord",
   "license": "MIT",
-  "type":"module",
+  "type": "module",
   "scripts": {
     "server": "node server.js"
   },
   "dependencies": {
     "colors": "^1.4.0",
-    "express": "^4.18.2"
+    "dotenv": "^16.1.3",
+    "express": "^4.18.2",
+    "mongoose": "^7.2.2",
+    "moongoose": "^0.0.5"
   }
 }
