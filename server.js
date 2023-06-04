@@ -12,18 +12,18 @@ app.get('/', (req, res) => {
     res.send('Hello, World!');
 });
 
-const port = 4000; 
+const port = 3000; 
 app.listen(port, async () => {
     console.log(colors.magenta(`Server is live, running on port: ${port}`));
 
     try {
-        console.log(`Connecting to MongoDB...`);
+        console.log(colors.green(`Connecting to MongoDB...`));
         await mongoose.connect(config.MONGODB_URI, {
             dbName: 'fishkaap'
         })
-        console.log("Database connection successful");
+        console.log(colors.green("Database connection successful!"));
     } catch (error) {
-        console.log("Error connecting to MongoDB:", error.message);
+        console.log(colors.red("Error connecting to MongoDB:", error.message));
         process.exit(1);
     }
 });
