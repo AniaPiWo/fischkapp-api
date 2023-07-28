@@ -5,7 +5,6 @@ import mongoose from "mongoose";
 import morgan from "morgan";
 import { api } from "./api.js";
 import { config } from "./modules/config.js";
-import { Fishka } from "./modules/model.js";
 
 const app = express();
 app.use(morgan("dev"));
@@ -14,7 +13,7 @@ dotenv.config();
 
 app.use("/", api);
 
-app.use("/", (req, res) => {
+app.use((req, res) => {
   res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
   res.setHeader("Pragma", "no-cache");
   res.setHeader("Expires", "0");
