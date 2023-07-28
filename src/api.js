@@ -50,7 +50,7 @@ api.put("/cards/:id", async (req, res) => {
     const { front, back, tags, author } = req.body;
 
     // It should not allow updating card when front value already exists in database
-    const existingCard = await Fishka.findOne({ _id: id });
+    const existingCard = await Fishka.findOne({ front: front });
     if (existingCard) {
       return res
         .status(400)
