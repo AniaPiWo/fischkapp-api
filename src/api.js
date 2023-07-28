@@ -6,7 +6,33 @@ export const api = Router();
 
 api.get("/cards", async (req, res) => {
   try {
-    const fishkas = await Fishka.find();
+    const fishkas = await Fishka.find().sort({ _id: -1 });
+    res.json({ fishkas });
+  } catch (error) {
+    res.status(500).json({
+      error: "An error occurred while retrieving data from the database.",
+    });
+  }
+});
+
+api.get("/cards/author/:author", async (req, res) => {
+  try {
+    const author = req.params.author;
+    const fishkas = await Fishka.find({ author: author }).sort({ _id: -1 });
+    res.json({ fishkas });
+  } catch (error) {
+    res.status(500).json({
+      error: "An error occurred while retrieving data from the database.",
+    });
+  }
+});
+
+api.get("/cards/tags/:tag", async (req, res) => {
+  try {
+    const tag = req.params.tag;
+    const fishkas = await Fishka.find({ tags: new RegExp(tag, "i") }).sort({
+      _id: -1,
+    });
     res.json({ fishkas });
   } catch (error) {
     res.status(500).json({
@@ -48,14 +74,6 @@ api.put("/cards/:id", async (req, res) => {
     await fishkaJoiSchema.validateAsync(req.body);
     const id = req.params.id;
     const { front, back, tags, author } = req.body;
-
-    /*     // It should not allow updating card when front value already exists in database
-    const existingCard = await Fishka.findOne({ front: front });
-    if (existingCard) {
-      return res
-        .status(400)
-        .json({ error: "A card with this front already exists!" });
-    } */
 
     const updatedFishka = await Fishka.findByIdAndUpdate(
       id,
