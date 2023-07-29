@@ -43,25 +43,21 @@ api.get("/cards/tags/:tag", async (req, res) => {
 
 api.get("/cards/:id", async (req, res) => {
   try {
-    await fishkaJoiSchema.validateAsync(req.body);
     const id = req.params.id;
     const reqFishkas = await Fishka.findOne({ _id: id });
     res.json({ reqFishkas });
   } catch (error) {
-    res.status(500).json({
-      error: "An error occurred while retrieving data from the database.",
-    });
+    return res.status(500).json({ error: error.message });
   }
 });
 
 api.post("/cards", async (req, res) => {
   try {
-    await fishkaJoiSchema.validateAsync(req.body);
     const { front, back, tags, author } = req.body;
     if (!front || !back)
       return res
         .status(400)
-        .json({ error: "Required fields: front and back!!" });
+        .json({ error: "Required fields: front and back!" });
     const newFishka = await Fishka.create({ front, back, tags, author });
     return res.status(201).json(newFishka);
   } catch (error) {
@@ -69,9 +65,8 @@ api.post("/cards", async (req, res) => {
   }
 });
 
-api.put("/cards/:id", async (req, res) => {
+api.patch("/cards/:id", async (req, res) => {
   try {
-    await fishkaJoiSchema.validateAsync(req.body);
     const id = req.params.id;
     const { front, back, tags, author } = req.body;
 
@@ -85,6 +80,28 @@ api.put("/cards/:id", async (req, res) => {
       return res.status(404).json({ error: "Card not found." });
     }
     return res.status(200).json(updatedFishka);
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
+});
+
+api.delete("/cards/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const timestamp = mongoose.Types.ObjectId(id).getTimestamp();
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+
+    if (timestamp >= fiveMinutesAgo) {
+      const reqFishkas = await Fishka.findOneAndDelete({ _id: id });
+      if (!reqFishkas) {
+        return res.status(404).json({ error: "Card not found" });
+      }
+      res.json({ reqFishkas });
+    } else {
+      return res.status(403).json({
+        error: "Cannot delete card. More than 5 minutes passed since creation.",
+      });
+    }
   } catch (error) {
     return res.status(400).json({ error: error.message });
   }
