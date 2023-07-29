@@ -5,12 +5,14 @@ import mongoose from "mongoose";
 import morgan from "morgan";
 import { api } from "./api.js";
 import { config } from "./modules/config.js";
+import cors from "cors";
 
 const app = express();
 app.use(morgan("dev"));
 app.use(express.json());
 dotenv.config();
 
+app.use(cors());
 app.use("/", api);
 
 app.use("/", (req, res) => {
@@ -22,7 +24,7 @@ app.use("/", (req, res) => {
 
 const port = 4000;
 app.listen(port, async () => {
-  console.log(colors.magenta(`Server is live, running on port: ${port}`));
+  console.log(colors.magenta(`CORS-enabled server, running on port: ${port}`));
 
   try {
     console.log(colors.green(`Connecting to MongoDB...`));
