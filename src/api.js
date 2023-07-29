@@ -91,19 +91,16 @@ api.delete("/cards/:id", async (req, res) => {
     const timestamp = mongoose.Types.ObjectId(id).getTimestamp();
     const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
 
-    if (timestamp <= fiveMinutesAgo) {
+    if (timestamp >= fiveMinutesAgo) {
       const reqFishkas = await Fishka.findOneAndDelete({ _id: id });
       if (!reqFishkas) {
         return res.status(404).json({ error: "Card not found" });
       }
       res.json({ reqFishkas });
     } else {
-      return res
-        .status(403)
-        .json({
-          error:
-            "Cannot delete card. More than 5 minutes passed since creation.",
-        });
+      return res.status(403).json({
+        error: "Cannot delete card. More than 5 minutes passed since creation.",
+      });
     }
   } catch (error) {
     return res.status(400).json({ error: error.message });
